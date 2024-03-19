@@ -9,7 +9,8 @@ export function Rotas() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/carrinho" element={<Carrinho />} />
-        <Route path="/produto" element={<Produto />} />
+        <Route path="/categoria/:id" element={<Produto />} />
+        <Route path="/produto/:id" element={<Produto />} />
         <Route path="/contato" element={<Contato />} />
       </Routes>
     </BrowserRouter>

@@ -57,7 +57,6 @@ export const DivForm = styled.div`
   > p{
     font-style: italic;
     width: 50%;
-
   }
 
 
