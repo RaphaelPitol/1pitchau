@@ -26,7 +26,7 @@ export const Card = (props: Produto) => {
   const navigate = useNavigate()
 
   function modal(p : any){
-   navigate('produto/'+p)
+   navigate('product/'+p)
   }
 
 

@@ -2,10 +2,11 @@ import { styled } from "styled-components";
 
 export const FormContainer = styled.div`
   max-width: 70%;
-  margin: 0 auto;
+  margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 `;
 
 export const FormGroup = styled.div`
@@ -53,11 +54,6 @@ export const DivForm = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-
-  > p{
-    font-style: italic;
-    width: 50%;
-  }
-
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
 `;

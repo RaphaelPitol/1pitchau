@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FormContainer,
   FormGroup,
@@ -10,29 +10,58 @@ import {
   DivForm,
 } from "./styles";
 import { useNavigate } from "react-router-dom";
+import { Menu } from "../../components/Menu";
+import axios from "axios";
 
-
+interface TypeContato {
+  nome: string;
+  email: string;
+  telefone: string;
+  cidade: string;
+  mensage: string;
+}
+interface Cidade {
+  id: number;
+  nome: string
+}
 
 export function Contato() {
   const navigate = useNavigate();
+  const [cidades, setCidades] = useState<Array<Cidade>>([]);
+  const [contato, setContato] = useState<TypeContato>({
+    nome: "",
+    email: "",
+    telefone: "",
+    cidade: "",
+    mensage: "",
+  });
 
-
-
-  function home() {
-
-    navigate("/" );
+  async function createContato(params: TypeContato) {
+    await axios.post("http://localhost:3000/contato/", params);
+    navigate("/");
   }
+
+
+  useEffect(() => {
+    async function fetchCidades() {
+      try {
+        const response = await axios.get(
+          "https://servicodados.ibge.gov.br/api/v1/localidades/estados/PR/municipios"
+        );
+        setCidades(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar cidades:", error);
+      }
+    }
+
+    fetchCidades();
+  }, []);
 
   return (
     <>
+      <Menu />
       <DivForm>
         <h1>Pagina de contato</h1>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic
-          voluptate quis consequatur vero inventore quia placeat nobis,
-          doloribus quo laudantium culpa voluptates dolores minima architecto id
-          saepe ipsum alias perspiciatis.
-        </p>
       </DivForm>
       <FormContainer>
         <FormGroup>
@@ -41,7 +70,9 @@ export function Contato() {
             type="text"
             id="name"
             name="name"
-
+            onChange={(event) =>
+              setContato({ ...contato, nome: event.target.value })
+            }
           />
         </FormGroup>
         <FormGroup>
@@ -50,7 +81,9 @@ export function Contato() {
             type="email"
             id="email"
             name="email"
-
+            onChange={(event) =>
+              setContato({ ...contato, email: event.target.value })
+            }
           />
         </FormGroup>
         <FormGroup>
@@ -59,28 +92,36 @@ export function Contato() {
             type="tel"
             id="phone"
             name="phone"
-
+            onChange={(event) =>
+              setContato({ ...contato, telefone: event.target.value })
+            }
           />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="cidade">Cidade:</Label>
-          <Select
-            id="cidade"
-            name="cidade"
-
-          >
-            <option value="1">Altônia</option>
-            <option value="2">Iporã</option>
-            <option value="3">Perola</option>
-            <option value="4">Umuarama</option>
-          </Select>
-        </FormGroup>
+        <Label htmlFor="cidade">Cidade:</Label>
+        <Select
+          id="cidade"
+          name="cidade"
+          onChange={(event) => setContato({ ...contato, cidade: event.target.value })}
+        >
+          {cidades.map((cidade) => (
+            <option key={cidade.id} value={cidade.nome}>
+              {cidade.nome}
+            </option>
+          ))}
+        </Select>
+      </FormGroup>
         <FormGroup>
           <Label htmlFor="message">Mensagem:</Label>
-          <TextArea id="message" name="message"
+          <TextArea
+            id="message"
+            name="message"
+            onChange={(event) =>
+              setContato({ ...contato, mensage: event.target.value })
+            }
           ></TextArea>
         </FormGroup>
-        <Button onClick={() => home()}>Enviar</Button>
+        <Button onClick={() => createContato(contato)}>Enviar</Button>
       </FormContainer>
     </>
   );

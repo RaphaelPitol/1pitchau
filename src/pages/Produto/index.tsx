@@ -17,7 +17,7 @@ import { Menu } from "../../components/Menu";
 interface Produto {
   id: number;
   nome: string;
-  imagemp: string;
+  imagemg: string;
   promo: number;
   valor: number;
 }
@@ -56,6 +56,7 @@ export function Produto() {
       .get("http://localhost:3000/produtos/" + id)
       .then((res) => {
         setDataProduto(res.data);
+        console.log(res.data)
       })
       .catch((err: AxiosError) => {
         console.log(err);
@@ -66,12 +67,12 @@ export function Produto() {
     <Menu/>
       <Container>
         <Title>{dataProduto?.nome}</Title>
-        <Image src={imagem + dataProduto?.imagemp} alt="" />
+        <Image src={imagem + dataProduto?.imagemg} alt="" />
         <Price>
           Preço Promocional:{" "}
           <Promo>
             {dataProduto?.promo !== undefined
-              ? formtateValor.format(dataProduto?.promo)
+              ? formtateValor.format(dataProduto?.valor)
               : ""}
           </Promo>
         </Price>
@@ -79,7 +80,7 @@ export function Produto() {
           Preço Original:{" "}
           <Original>
             {dataProduto?.valor !== undefined
-              ? formtateValor.format(dataProduto?.valor)
+              ? formtateValor.format(dataProduto?.promo)
               : ""}
           </Original>
         </Price>
