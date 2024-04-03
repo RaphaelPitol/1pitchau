@@ -17,28 +17,36 @@ const formtateValor = new Intl.NumberFormat('pt-BR',{style:'currency', currency:
 
 export const Product = () => {
   const { id } = useParams();
-  const[dataProduct, setDataProduct] = useState<Produto | null>(null)
+  const[dataProduct, setDataProduct] = useState<Produto>()
 
 
   const imagem =
   "https://raw.githubusercontent.com/profchines/imagens1Pitchau/main/Imagens1Pitchau/";
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/produtos/${id}`);
-        setDataProduct(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get(`http://localhost:3000/produtos/${id}`);
+    //     setDataProduct(response.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
 
-    fetchData();
+    // fetchData();
+    axios.get('http://localhost:3000/produtos?id='+id)
+    .then((response)=>{
+      setDataProduct(response.data[0])
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
   }, [id]);
 
 
 
   return (
+
     <>
       <Menu />
       <div
@@ -49,12 +57,16 @@ export const Product = () => {
           marginBottom: 40,
         }}
       >
-        <>
+          {
+
+      dataProduct ?
+
+      <>
           <h1>Produto</h1>
           <Row>
             <Col4>
               <img
-                src={imagem + dataProduct?.imagemg}
+                src={imagem + dataProduct.imagemg}
                 alt=""
                 style={{
                   width: "100%",
@@ -63,14 +75,14 @@ export const Product = () => {
             </Col4>
 
             <Col6>
-            <h3>{dataProduct?.nome}</h3>
+            <h3>{dataProduct.nome}</h3>
             <p style={{
               textDecoration: 'line-through'
-            }}>R$ {dataProduct && dataProduct.valor ? formtateValor.format(dataProduct.valor) : ''}</p>
+            }}>R$ {formtateValor.format(dataProduct.valor)}</p>
             <p style={{
               fontWeight: 'bold',
               color: 'red'
-            }}>R$ {dataProduct && dataProduct.promo ? formtateValor.format(dataProduct.promo) : ''}</p>
+            }}>R$ {formtateValor.format(dataProduct.promo)}</p>
 
             <form action="">
               <Input
@@ -89,6 +101,10 @@ export const Product = () => {
             </Col6>
           </Row>
         </>
+      :
+       <h2>Nenhum Produto encontrado!</h2>
+    }
+
       </div>
     </>
   );

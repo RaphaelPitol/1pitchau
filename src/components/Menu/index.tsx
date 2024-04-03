@@ -77,7 +77,9 @@ export const Menu = () => {
             <NavbarLinkExtended to="/carrinho">
               <FaShoppingCart size={22} />
             </NavbarLinkExtended>
-            <NavbarLinkExtended to="/contato">Contato</NavbarLinkExtended>
+            <NavbarLinkExtended to="/contato">
+              Contato
+            </NavbarLinkExtended>
           </RightContainer>
         </NavbarInnerContainer>
 

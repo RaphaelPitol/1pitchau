@@ -25,11 +25,6 @@ export const Card = (props: Produto) => {
   const{id, nome, img, preco_promo, preco} = props;
   const navigate = useNavigate()
 
-  function modal(p : any){
-   navigate('product/'+p)
-  }
-
-
   return (
     <>
 
@@ -38,7 +33,7 @@ export const Card = (props: Produto) => {
         <Title>{nome}</Title>
         <TitlePreco>{formtateValor.format(preco)}</TitlePreco>
         <TitlePromo>{formtateValor.format(preco_promo)}</TitlePromo>
-        <Button onClick={()=>{modal(id)}}>
+        <Button onClick={()=>{navigate('product/'+id)}}>
           <TextButton>Detalhes</TextButton>
         </Button>
 
