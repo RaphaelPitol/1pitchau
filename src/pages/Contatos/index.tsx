@@ -38,7 +38,7 @@ export function Contato() {
 
   async function createContato(params: TypeContato) {
     await axios.post("http://localhost:3000/contato/", params);
-    navigate("/");
+    navigate("/listacontato");
   }
 
 
@@ -50,7 +50,7 @@ export function Contato() {
         );
         setCidades(response.data);
       } catch (error) {
-        console.error("Erro ao buscar cidades:", error);
+        alert("Erro ao buscar cidades:" + error);
       }
     }
 

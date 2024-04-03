@@ -70,6 +70,7 @@ export const Menu = () => {
                   </NavbarLink>
                 );
               })}
+              <NavbarLink to={"/listacontato"}>Lista de Contatos</NavbarLink>
             </NavbarLinkContainer>
           </LeftContainer>
 
