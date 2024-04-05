@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     bgColor?: string;
 }
@@ -54,3 +55,4 @@ export const Button = styled.button<ButtonProps>`
 export const TextButton = styled.h3`
     color: var(--white);
 `;
+

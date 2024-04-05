@@ -12,7 +12,7 @@ export function Rotas() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/carrinho" element={<Carrinho />} />
-        <Route path="/contato" element={<Contato />} />
+        <Route path="/contato/:id?" element={<Contato />} />
         <Route path="/listacontato" element={<ListaContatos/>}/>
         <Route path="/detalhecontato/:id" element={<DetalheContato/>}/>
 

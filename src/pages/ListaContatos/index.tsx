@@ -1,4 +1,4 @@
-import { FaTrash } from "react-icons/fa";
+
 import { Menu } from "../../components/Menu";
 import { Button, TBTr, THTh, THtr, Table, Td, TextButton } from "./styles";
 import { useEffect, useState } from "react";
