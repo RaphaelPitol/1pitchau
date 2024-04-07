@@ -15,6 +15,7 @@ interface IContato {
 }
 
 export function ListaContatos() {
+
   const [contato, setContato] = useState<Array<IContato>>([]);
   const navigate = useNavigate()
 

@@ -47,12 +47,14 @@ export const Button = styled.button<ButtonProps>`
     padding: 15px;
     border-radius: 8px;
     background-color: ${(props: any) => props.bgColor || `var(--red)`};
-    :hover {
-        /* filter: brightness(10); */
+    &:hover {
+      filter: hue-rotate(60deg);
+      background-color: green
     }
     margin-top: 10px;
 `;
 export const TextButton = styled.h3`
     color: var(--white);
+
 `;
 

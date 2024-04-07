@@ -1,8 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Menu } from "../../components/Menu";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ContatoDetalhesContainer, DetalhesItem } from "./styles";
+import { Button } from "../Contatos/styles";
+import { TextButton } from "../ListaContatos/styles";
 
 interface IContato {
   nome: string;
@@ -13,13 +15,14 @@ interface IContato {
 }
 
 export function DetalheContato(){
+  const navigate = useNavigate()
   const {id} = useParams()
   const[contato, setContato] = useState<IContato>()
 
   useEffect(()=>{
     axios.get('http://localhost:3000/contato?id=' + id)
     .then((res)=>{
-      console.log(res.data)
+      // console.log(res.data)
       setContato(res.data[0])
 
     })
@@ -57,6 +60,11 @@ export function DetalheContato(){
         <h3>Mensagem:</h3>
         <p>{contato.mensage}</p>
       </DetalhesItem>
+      <Button
+      onClick={()=>{navigate('/contato/'+id)}}
+      >
+        <TextButton>Editar</TextButton>
+      </Button>
     </ContatoDetalhesContainer>
     :
     <h1>Nenhum Detalhe encontrado!</h1>

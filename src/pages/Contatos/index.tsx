@@ -9,11 +9,12 @@ import {
   Button,
   DivForm,
 } from "./styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Menu } from "../../components/Menu";
 import axios from "axios";
 
 interface TypeContato {
+  id?: number;
   nome: string;
   email: string;
   telefone: string;
@@ -22,10 +23,11 @@ interface TypeContato {
 }
 interface Cidade {
   id: number;
-  nome: string
+  nome: string;
 }
 
 export function Contato() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [cidades, setCidades] = useState<Array<Cidade>>([]);
   const [contato, setContato] = useState<TypeContato>({
@@ -35,12 +37,6 @@ export function Contato() {
     cidade: "",
     mensage: "",
   });
-
-  async function createContato(params: TypeContato) {
-    await axios.post("http://localhost:3000/contato/", params);
-    navigate("/listacontato");
-  }
-
 
   useEffect(() => {
     async function fetchCidades() {
@@ -53,9 +49,32 @@ export function Contato() {
         alert("Erro ao buscar cidades:" + error);
       }
     }
-
     fetchCidades();
-  }, []);
+
+    if (id) {
+      axios
+        .get(`http://localhost:3000/contato/${id}`)
+        .then((resp) => {
+          setContato(resp.data);
+        })
+        .catch(() => {
+          console.log("Erro no Id");
+        });
+    }
+  }, [id]);
+
+  async function createUpdateContato() {
+    if (id) {
+      await axios.put(`http://localhost:3000/contato/${id}`, contato);
+      // console.log(contato)
+      alert("Editado com Sucesso!");
+    } else {
+      await axios.post("http://localhost:3000/contato/", contato);
+      // console.log(contato)
+      alert("Criado com Sucesso!");
+    }
+    navigate("/listacontato");
+  }
 
   return (
     <>
@@ -70,6 +89,7 @@ export function Contato() {
             type="text"
             id="name"
             name="name"
+            value={contato.nome}
             onChange={(event) =>
               setContato({ ...contato, nome: event.target.value })
             }
@@ -81,6 +101,7 @@ export function Contato() {
             type="email"
             id="email"
             name="email"
+            value={contato.email}
             onChange={(event) =>
               setContato({ ...contato, email: event.target.value })
             }
@@ -92,36 +113,41 @@ export function Contato() {
             type="tel"
             id="phone"
             name="phone"
+            value={contato.telefone}
             onChange={(event) =>
               setContato({ ...contato, telefone: event.target.value })
             }
           />
         </FormGroup>
         <FormGroup>
-        <Label htmlFor="cidade">Cidade:</Label>
-        <Select
-          id="cidade"
-          name="cidade"
-          onChange={(event) => setContato({ ...contato, cidade: event.target.value })}
-        >
-          {cidades.map((cidade) => (
-            <option key={cidade.id} value={cidade.nome}>
-              {cidade.nome}
-            </option>
-          ))}
-        </Select>
-      </FormGroup>
+          <Label htmlFor="cidade">Cidade:</Label>
+          <Select
+            id="cidade"
+            name="cidade"
+            value={contato.cidade}
+            onChange={(event) =>
+              setContato({ ...contato, cidade: event.target.value })
+            }
+          >
+            {cidades.map((cidade) => (
+              <option key={cidade.id} value={cidade.nome}>
+                {cidade.nome}
+              </option>
+            ))}
+          </Select>
+        </FormGroup>
         <FormGroup>
           <Label htmlFor="message">Mensagem:</Label>
           <TextArea
             id="message"
             name="message"
+            value={contato.mensage}
             onChange={(event) =>
               setContato({ ...contato, mensage: event.target.value })
             }
           ></TextArea>
         </FormGroup>
-        <Button onClick={() => createContato(contato)}>Enviar</Button>
+        <Button onClick={createUpdateContato}>Enviar</Button>
       </FormContainer>
     </>
   );
