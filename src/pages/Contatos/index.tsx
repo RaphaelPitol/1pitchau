@@ -80,7 +80,12 @@ export function Contato() {
     <>
       <Menu />
       <DivForm>
+      {
+        id ?
+        <h1>Editando Contato</h1>
+        :
         <h1>Pagina de contato</h1>
+      }
       </DivForm>
       <FormContainer>
         <FormGroup>
