@@ -8,6 +8,7 @@ import {
   TitlePromo,
 } from "./styles";
 import { useNavigate } from "react-router-dom";
+import { formateValor } from "../../service/format";
 
 interface Produto {
   id?: number;
@@ -17,7 +18,6 @@ interface Produto {
   preco: number;
 }
 
-const formtateValor = new Intl.NumberFormat('pt-BR',{style:'currency', currency: 'BRL',})
 
 //componente que recebe parametros por propriedade
 export const Card = (props: Produto) => {
@@ -31,8 +31,8 @@ export const Card = (props: Produto) => {
     <CardBody key={id}>
         <img src={img} alt="" />
         <Title>{nome}</Title>
-        <TitlePreco>{formtateValor.format(preco)}</TitlePreco>
-        <TitlePromo>{formtateValor.format(preco_promo)}</TitlePromo>
+        <TitlePreco>{formateValor.format(preco)}</TitlePreco>
+        <TitlePromo>{formateValor.format(preco_promo)}</TitlePromo>
         <Button onClick={()=>{navigate('product/'+id)}}>
           <TextButton>Detalhes</TextButton>
         </Button>

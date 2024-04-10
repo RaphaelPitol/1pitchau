@@ -1,22 +1,26 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Menu } from "../../components/Menu";
 import { Button, Col4, Col6, Row, TextButton, Input } from "./styles";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
+import { ICarrinho } from "../../@types/interfaces";
+import { formateValor } from "../../service/format";
 
 interface Produto {
   id: number,
   nome: string,
   imagemg: string,
+  imagemp: string,
   promo: number,
-  valor: number
+  promoNumber: number,
+  valor: number,
+  id_categoria: number,
 }
 
 
-const formtateValor = new Intl.NumberFormat('pt-BR',{style:'currency', currency: 'BRL',})
-
 export const Product = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const[dataProduct, setDataProduct] = useState<Produto>()
 
 
@@ -43,6 +47,47 @@ export const Product = () => {
     })
   }, [id]);
 
+  //SyntheticEvent serve para tipar os dados do formulario
+  const onSubmit = useCallback((e: SyntheticEvent)=>{
+    //preventDefault não deixa atualizar a pagina com formulario
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      quantidade:{value: number}
+    }
+
+    if(dataProduct){
+      let qtd = target.quantidade.value
+      if(qtd > 0){
+        let objProduto = {
+          ...dataProduct,
+          quantidade: qtd,
+          total: Number(dataProduct.promo) * qtd
+        }
+
+        // console.log(objProduto)
+        //localStorage é uma memoria do navegador
+        //o getItem traz alguma coisa do localStorage com o nome @1pitchau:carrinho
+        let lsCarrinho = localStorage.getItem('@1pitchau:carrinho')
+
+        let carrinho: Array<ICarrinho> = []
+
+        if(typeof lsCarrinho === 'string'){
+          //json.parse transforma em os dados do localStorage em objeto
+          carrinho = JSON.parse(lsCarrinho)
+        }
+
+
+        if(carrinho.length > 0){
+          carrinho.push(objProduto)
+          //stringify converte o array em string ou Json
+          localStorage.setItem('@1pitchau:carrinho', JSON.stringify(carrinho))
+        }else{
+          localStorage.setItem('@1pitchau:carrinho', JSON.stringify([objProduto]))
+        }
+        navigate('/carrinho')
+      }
+    }
+  },[dataProduct])
 
 
   return (
@@ -78,13 +123,15 @@ export const Product = () => {
             <h3>{dataProduct.nome}</h3>
             <p style={{
               textDecoration: 'line-through'
-            }}>R$ {formtateValor.format(dataProduct.valor)}</p>
+            }}>R$ {formateValor.format(dataProduct.valor)}</p>
             <p style={{
               fontWeight: 'bold',
               color: 'red'
-            }}>R$ {formtateValor.format(dataProduct.promo)}</p>
+            }}>R$ {formateValor.format(dataProduct.promo)}</p>
 
-            <form action="">
+            <form action=""
+            onSubmit={onSubmit}
+            >
               <Input
                 type="number"
                 name="quantidade"
@@ -92,7 +139,9 @@ export const Product = () => {
                 min="1"
                 required
               />
-              <Button>
+              <Button
+              type="submit"
+              >
                 <TextButton>
                   Adicionar ao Carrinho
                 </TextButton>
